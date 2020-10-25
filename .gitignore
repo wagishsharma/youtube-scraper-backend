@@ -1,0 +1,4 @@
+.env
+node_modules
+firebase-account-key.json
+youtube-client.json
