@@ -6,6 +6,7 @@ const fs = require('fs');
 
 /*youtube scraper*/
 const YoutubeScraper = require('./YoutubeScraper');
+const ytdl = require('ytdl-core');
 const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY;
 
 /*firebase*/
@@ -76,7 +77,7 @@ app.post('/api/trending', async (req, res, next) => {
 });
 app.get('/api/videos/:id',  async (req, res, next) =>  {
 	
-	var response = {};
+	let response = {};
 	popular_video_ref.child(""+req.params.id).once('value',function(snap){
 		let video = snap.val(); 
 		 
@@ -91,5 +92,16 @@ app.get('/api/videos/:id',  async (req, res, next) =>  {
 		}
 
 	});
+
+});
+
+app.get('/api/videos/:id/download',  async (req, res, next) =>  {
+	
+	let response = {};
+
+	let id = req.params.id
+	let url = "https://www.youtube.com/watch?v="+id;   
+    res.header("Content-Disposition", 'attachment;\  filename="Video.mp4');    
+    ytdl(url, {format: 'mp4'}).pipe(res);
 
 });
